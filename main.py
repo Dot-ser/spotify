@@ -1,19 +1,10 @@
-from flask import Flask, request, send_file
-from flask_cors import CORS
-from puppeteer import launch
+from flask import Flask, jsonify
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(name)
 
-@app.route('/screenshot', methods=['GET'])
-def screenshot():
-    url = request.args.get('www.google.com')
-    browser = launch(headless=True)
-    page = browser.newPage()
-    page.goto(url)
-    screenshot = page.screenshot()
-    browser.close()
-    return send_file(screenshot, mimetype='image/png')
+@app.route('/hi', methods=['GET'])
+def say_hi():
+return jsonify({'message': 'Hi'})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if name == 'main':
+app.run(debug=True)
