@@ -7,7 +7,7 @@ CORS(app)
 
 @app.route('/screenshot', methods=['GET'])
 def screenshot():
-    url = request.args.get('url')
+    url = request.args.get('www.google.com')
     browser = launch(headless=True)
     page = browser.newPage()
     page.goto(url)
