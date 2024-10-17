@@ -25,7 +25,7 @@ async def igdownload(client, message):
     
     try:
         # Add a timeout to avoid hanging requests
-        response = requests.get(f"https://horridapi.onrender.com/instadl?url={url}", timeout=10)
+        response = requests.get(f"https://horridapi.onrender.com/instadl?url={url}", timeout=60)
         data = response.json()
     except requests.exceptions.RequestException as e:
         await msg.edit_text(f"**Error contacting API: {str(e)}**")
