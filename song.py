@@ -1,46 +1,53 @@
-from HorridAPI import Songmrz 
+from HorridAPI import Songmrz
 import os
 from pyrogram import Client, filters
 import aiohttp
+from dotenv import load_dotenv  # Import dotenv to load environment variables
 
-TOKEN = ""
-API_ID = 28282 # ADD HERE YOUR API ID 
-API_HASH = ""
+# Load environment variables from .env file
+load_dotenv()
 
+# Retrieve environment variables
+TOKEN = os.getenv("TOKEN")
+API_ID = int(os.getenv("API_ID"))  # API_ID must be an integer
+API_HASH = os.getenv("API_HASH")
+API_KEY = os.getenv("API_KEY")
+
+# Check if all necessary environment variables are loaded
+if not all([TOKEN, API_ID, API_HASH, API_KEY]):
+    raise ValueError("Missing environment variables. Please check your .env file.")
+
+# Initialize the bot and the API
 bot = Client(name="bot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
-
-
-api_key = "horridapi_Db9RVKwf6zaBM8iatiQ4-Q_free_key" 
-
-Horrid = Songmrz(api_key)
+Horrid = Songmrz(API_KEY)
 
 @bot.on_message(filters.command("song"))
 async def song(client, message):
-    if len(message.command) < 2:  # Changed to message.command to properly check for command arguments
-        await message.reply("Give An Any Song Name!")
+    if len(message.command) < 2:
+        await message.reply("Give Any Song Name!")
         return
 
-    query = " ".join(message.command[1:])  
+    query = " ".join(message.command[1:])
     m = await message.reply_text("📥 Downloading...")
 
     try:
-        data = Horrid.download(query)  # Ensure this line doesn't throw an error (handle exceptions if necessary)
+        data = Horrid.download(query)
         url = data.url
         thumb_url = data.thumb
         title = data.title
         dura = data.duration
         songs = f"Title: {title}\nDuration: {dura}\nProvided by @Mrz_bots"
 
-        await m.edit("📤 Uploading...") 
+        await m.edit("📤 Uploading...")
         await message.reply_photo(photo=thumb_url, caption=songs)
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 with open(f"{title}.mp3", "wb") as f:
-                    f.write(await resp.read())  # Use await resp.read() instead of await resp.content.read()
+                    f.write(await resp.read())  # Use await resp.read() to download the song
             async with session.get(thumb_url) as resp:
                 with open("thumb.jpg", "wb") as f:
-                    f.write(await resp.read())  # Same change here
+                    f.write(await resp.read())  # Download the thumbnail
 
         await message.reply_audio(f"{title}.mp3", thumb="thumb.jpg", title=title, caption=songs)
     except Exception as e:
@@ -49,7 +56,5 @@ async def song(client, message):
 
     await m.delete()
 
-
-
-print("bot is working")
+print("Bot is working")
 bot.run()
