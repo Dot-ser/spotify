@@ -21,7 +21,7 @@ if not all([TOKEN, API_ID, API_HASH, API_KEY]):
 bot = Client(name="bot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
 Horrid = Songmrz(API_KEY)
 
-@bot.on_message(filters.command("song"))
+@bot.on_message(filters.command(["song", "play", "played"]))
 async def song(client, message):
     if len(message.command) < 2:
         await message.reply("Give Any Song Name!")
