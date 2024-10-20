@@ -2,3 +2,8 @@ pyrogram==2.0.106
 requests==2.31.0
 python-dotenv==1.0.0
 tgcrypto==1.2.3
+aiohttp==3.8.1
+fastapi==0.78.0
+horridapi==1.0.0
+uvicorn==0.18.2
+
